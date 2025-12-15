@@ -28,12 +28,7 @@ export class User {
   country_code: string;
 
   // Premium+ specific fields (nullable)
-  @Column({
-    type: 'varchar',
-    length: 20,
-    nullable: true,
-    enum: ['male', 'female', 'other', 'prefer_not_to_say']
-  })
+  @Column({ type: 'varchar', length: 20, nullable: true })
   gender?: string;
 
   @Column({ type: 'date', nullable: true })

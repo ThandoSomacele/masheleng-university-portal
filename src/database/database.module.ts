@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { User } from '../users/entities/user.entity';
 
 @Module({
   imports: [
@@ -20,8 +21,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         return {
           type: 'postgres',
           url,
-          entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-          migrations: [__dirname + '/migrations/*{.ts,.js}'],
+          entities: [User],
+          migrations: [],
           synchronize: configService.get<boolean>('DATABASE_SYNCHRONIZE', false),
           logging: configService.get('NODE_ENV') === 'development',
           extra: {

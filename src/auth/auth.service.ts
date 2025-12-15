@@ -133,8 +133,8 @@ export class AuthService {
       email,
     };
 
-    const accessTokenExpiry = this.configService.get<string>('JWT_EXPIRATION', '15m');
-    const refreshTokenExpiry = this.configService.get<string>('JWT_REFRESH_EXPIRATION', '7d');
+    const accessTokenExpiry = this.configService.get<string>('JWT_ACCESS_EXPIRY', '15m');
+    const refreshTokenExpiry = this.configService.get<string>('JWT_REFRESH_EXPIRY', '7d');
 
     const [access_token, refresh_token] = await Promise.all([
       this.jwtService.signAsync(payload, {
