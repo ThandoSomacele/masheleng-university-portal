@@ -5,19 +5,14 @@ services:
     image: postgres:16-alpine
     container_name: masheleng-postgres
     environment:
-      POSTGRES_DB: masheleng_portal
       POSTGRES_USER: masheleng
       POSTGRES_PASSWORD: masheleng_dev_password_2024
+      POSTGRES_DB: masheleng_portal
     ports:
       - '5432:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    command:
-      - 'postgres'
-      - '-c'
-      - 'max_connections=200'
-      - '-c'
-      - 'shared_buffers=256MB'
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
     healthcheck:
       test: ['CMD-SHELL', 'pg_isready -U masheleng -d masheleng_portal']
       interval: 10s
