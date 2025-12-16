@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { User } from '../users/entities/user.entity';
+import { SubscriptionTier } from '../subscriptions/entities/subscription-tier.entity';
+import { UserSubscription } from '../subscriptions/entities/user-subscription.entity';
 
 @Module({
   imports: [
@@ -21,7 +23,7 @@ import { User } from '../users/entities/user.entity';
         return {
           type: 'postgres',
           url,
-          entities: [User],
+          entities: [User, SubscriptionTier, UserSubscription],
           migrations: [],
           synchronize: configService.get<boolean>('DATABASE_SYNCHRONIZE', false),
           logging: configService.get('NODE_ENV') === 'development',
