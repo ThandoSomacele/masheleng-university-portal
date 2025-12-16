@@ -4,6 +4,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { User } from '../users/entities/user.entity';
 import { SubscriptionTier } from '../subscriptions/entities/subscription-tier.entity';
 import { UserSubscription } from '../subscriptions/entities/user-subscription.entity';
+import { Payment } from '../payments/entities/payment.entity';
 
 @Module({
   imports: [
@@ -23,7 +24,7 @@ import { UserSubscription } from '../subscriptions/entities/user-subscription.en
         return {
           type: 'postgres',
           url,
-          entities: [User, SubscriptionTier, UserSubscription],
+          entities: [User, SubscriptionTier, UserSubscription, Payment],
           migrations: [],
           synchronize: configService.get<boolean>('DATABASE_SYNCHRONIZE', false),
           logging: configService.get('NODE_ENV') === 'development',

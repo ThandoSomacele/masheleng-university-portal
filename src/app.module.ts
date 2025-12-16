@@ -6,6 +6,7 @@ import { DatabaseModule } from './database/database.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { SubscriptionsModule } from './subscriptions/subscriptions.module';
+import { PaymentsModule } from './payments/payments.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { SubscriptionsModule } from './subscriptions/subscriptions.module';
     UsersModule,
     AuthModule,
     SubscriptionsModule,
+    PaymentsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
