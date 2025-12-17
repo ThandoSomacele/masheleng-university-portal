@@ -1,6 +1,8 @@
 # 🚀 Framer Integration - Quick Start
 
-Get your Framer site connected to the backend in 3 steps.
+✅ **STATUS: Backend Connected Successfully!**
+
+Your Framer site is now connected to the NestJS backend. CORS is configured and working.
 
 ## Step 1: Start Backend with ngrok (5 minutes)
 

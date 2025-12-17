@@ -14,7 +14,7 @@
 
 class MashelengAPI {
   constructor(baseURL) {
-    this.baseURL = baseURL || 'https://your-ngrok-url.ngrok-free.app/api/v1';
+    this.baseURL = baseURL || 'https://8dff51bd1178.ngrok-free.app/api/v1';
     this.tokenKey = 'masheleng_token';
     this.refreshTokenKey = 'masheleng_refresh_token';
   }

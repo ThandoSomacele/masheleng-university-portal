@@ -24,7 +24,8 @@ async function bootstrap() {
       const isAllowed = allowedOrigins.some((allowed) => {
         if (allowed.includes('*')) {
           // Support wildcard patterns like https://*.ngrok-free.app
-          const pattern = new RegExp('^' + allowed.replace(/\*/g, '.*').replace(/\./g, '\\.') + '$');
+          // First escape dots, then replace * with .*
+          const pattern = new RegExp('^' + allowed.replace(/\./g, '\\.').replace(/\*/g, '.*') + '$');
           return pattern.test(origin);
         }
         return allowed === origin;
