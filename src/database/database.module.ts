@@ -5,6 +5,10 @@ import { User } from '../users/entities/user.entity';
 import { SubscriptionTier } from '../subscriptions/entities/subscription-tier.entity';
 import { UserSubscription } from '../subscriptions/entities/user-subscription.entity';
 import { Payment } from '../payments/entities/payment.entity';
+import { Course } from '../courses/entities/course.entity';
+import { CourseModule as CourseModuleEntity } from '../courses/entities/course-module.entity';
+import { CourseLesson } from '../courses/entities/course-lesson.entity';
+import { UserCourseEnrollment } from '../courses/entities/user-course-enrollment.entity';
 
 @Module({
   imports: [
@@ -24,7 +28,16 @@ import { Payment } from '../payments/entities/payment.entity';
         return {
           type: 'postgres',
           url,
-          entities: [User, SubscriptionTier, UserSubscription, Payment],
+          entities: [
+            User,
+            SubscriptionTier,
+            UserSubscription,
+            Payment,
+            Course,
+            CourseModuleEntity,
+            CourseLesson,
+            UserCourseEnrollment,
+          ],
           migrations: [],
           synchronize: configService.get<boolean>('DATABASE_SYNCHRONIZE', false),
           logging: configService.get('NODE_ENV') === 'development',
