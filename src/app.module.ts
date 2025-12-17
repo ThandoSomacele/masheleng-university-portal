@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { SubscriptionsModule } from './subscriptions/subscriptions.module';
 import { PaymentsModule } from './payments/payments.module';
 import { CoursesModule } from './courses/courses.module';
+import { InsuranceModule } from './insurance/insurance.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { CoursesModule } from './courses/courses.module';
     SubscriptionsModule,
     PaymentsModule,
     CoursesModule,
+    InsuranceModule,
   ],
   controllers: [AppController],
   providers: [AppService],

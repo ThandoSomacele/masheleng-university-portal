@@ -471,6 +471,98 @@ class MashelengAPI {
       method: 'DELETE',
     });
   }
+
+  // ======================
+  // INSURANCE
+  // ======================
+
+  /**
+   * Create insurance policy (requires authentication)
+   * @param {Object} policyData - { type, premium, coverageAmount, beneficiaries?, medicalInfo?, notes? }
+   * @returns {Promise<InsurancePolicy>}
+   */
+  async createInsurancePolicy(policyData) {
+    return this.request('/insurance/policies', {
+      method: 'POST',
+      body: JSON.stringify(policyData),
+    });
+  }
+
+  /**
+   * Get my insurance policies (requires authentication)
+   * @returns {Promise<InsurancePolicy[]>}
+   */
+  async getMyInsurancePolicies() {
+    return this.request('/insurance/policies/my');
+  }
+
+  /**
+   * Get insurance policy by ID (requires authentication)
+   * @param {string} policyId
+   * @returns {Promise<InsurancePolicy>}
+   */
+  async getInsurancePolicyById(policyId) {
+    return this.request(`/insurance/policies/${policyId}`);
+  }
+
+  /**
+   * Cancel insurance policy (requires authentication)
+   * @param {string} policyId
+   * @returns {Promise<InsurancePolicy>}
+   */
+  async cancelInsurancePolicy(policyId) {
+    return this.request(`/insurance/policies/${policyId}/cancel`, {
+      method: 'PATCH',
+    });
+  }
+
+  /**
+   * Get all insurance policies (admin only)
+   * @returns {Promise<InsurancePolicy[]>}
+   */
+  async getAllInsurancePolicies() {
+    return this.request('/insurance/admin/policies');
+  }
+
+  /**
+   * Get pending insurance policies (admin only)
+   * @returns {Promise<InsurancePolicy[]>}
+   */
+  async getPendingInsurancePolicies() {
+    return this.request('/insurance/admin/policies/pending');
+  }
+
+  /**
+   * Approve insurance policy (admin only)
+   * @param {string} policyId
+   * @returns {Promise<InsurancePolicy>}
+   */
+  async approveInsurancePolicy(policyId) {
+    return this.request(`/insurance/admin/policies/${policyId}/approve`, {
+      method: 'PATCH',
+    });
+  }
+
+  /**
+   * Reject insurance policy (admin only)
+   * @param {string} policyId
+   * @param {string} reason
+   * @returns {Promise<InsurancePolicy>}
+   */
+  async rejectInsurancePolicy(policyId, reason) {
+    return this.request(`/insurance/admin/policies/${policyId}/reject`, {
+      method: 'PATCH',
+      body: JSON.stringify({ reason }),
+    });
+  }
+
+  /**
+   * Get insurance statistics (admin only)
+   * @returns {Promise<Object>}
+   */
+  async getInsuranceStatistics() {
+    return this.request('/insurance/admin/statistics');
+  }
 }
 
 // Export for use in Framer
