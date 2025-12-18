@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { MashelengAPI } from '../api-client.js';
+import React, { useState } from 'react';
+import { MashelengAPI } from '../api_client.js';
 import { API_URL } from '../config.js';
 
 /**
@@ -266,7 +266,8 @@ export default function InsuranceActivation() {
         </button>
 
         <p style={styles.disclaimer}>
-          By activating this cover, you agree to our terms and conditions. Your funeral cover will be active immediately upon submission.
+          By activating this cover, you agree to our terms and conditions. Your funeral cover will be active immediately
+          upon submission.
         </p>
       </form>
     </div>
