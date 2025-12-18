@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { MashelengAPI } from '../api_client';
-import { API_URL } from '../config';
+import { useState } from "react"
+import { MashelengAPI } from "./api_client.js"
+import { API_URL } from "./config.js"
 
 /**
  * LoginForm - Matches Masheleng Design System
