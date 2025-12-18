@@ -1,6 +1,6 @@
-import { useState } from "react"
-import { MashelengAPI } from "./api_client.js"
-import { API_URL } from "./config.js"
+import React, { useState } from "react"
+import { MashelengAPI } from "../api-client.js"
+import { API_URL } from "../config.js"
 
 /**
  * RegisterForm - Matches Masheleng Design System
@@ -21,14 +21,14 @@ export default function RegisterForm() {
     const [error, setError] = useState("")
     const [success, setSuccess] = useState(false)
 
-    const handleChange = (e) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         setFormData({
             ...formData,
             [e.target.name]: e.target.value,
         })
     }
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         setError("")
 
@@ -62,7 +62,7 @@ export default function RegisterForm() {
 
         } catch (err) {
             console.error("❌ Registration failed:", err)
-            setError(err.message || "Registration failed. Please try again.")
+            setError((err as Error).message || "Registration failed. Please try again.")
         } finally {
             setLoading(false)
         }

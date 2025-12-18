@@ -4,8 +4,13 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToMany,
 } from 'typeorm';
+
+export enum UserRole {
+  USER = 'user',
+  ADMIN = 'admin',
+  SUPER_ADMIN = 'super_admin',
+}
 
 @Entity('users')
 export class User {
@@ -42,6 +47,13 @@ export class User {
 
   @Column({ type: 'varchar', length: 50, nullable: true })
   encryption_key_id?: string;
+
+  // User roles
+  @Column({
+    type: 'simple-array',
+    default: UserRole.USER,
+  })
+  roles: UserRole[];
 
   // Account status
   @Column({ type: 'boolean', default: false })

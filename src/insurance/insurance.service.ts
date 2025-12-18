@@ -149,8 +149,14 @@ export class InsuranceService {
     }
 
     try {
+      interface UnderwriterResponse {
+        underwriterId: string;
+        riskScore: number;
+        notes: string;
+      }
+
       const response = await firstValueFrom(
-        this.httpService.post(
+        this.httpService.post<UnderwriterResponse>(
           `${underwriterUrl}/policies/review`,
           {
             policyId: policy.id,
@@ -178,7 +184,7 @@ export class InsuranceService {
         },
       });
     } catch (error) {
-      console.error('Underwriter submission failed:', error.message);
+      console.error('Underwriter submission failed:', (error as Error).message);
       throw error;
     }
   }

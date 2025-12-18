@@ -1,6 +1,6 @@
-import { useState } from "react"
-import { MashelengAPI } from "./api_client.js"
-import { API_URL } from "./config.js"
+import React, { useState } from "react"
+import { MashelengAPI } from "../api-client.js"
+import { API_URL } from "../config.js"
 
 /**
  * LoginForm - Matches Masheleng Design System
@@ -16,7 +16,7 @@ export default function LoginForm() {
   const [success, setSuccess] = useState(false);
   const [userData, setUserData] = useState(null);
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError('');
     setLoading(true);
@@ -30,7 +30,7 @@ export default function LoginForm() {
       setSuccess(true);
     } catch (err) {
       console.error('❌ Login failed:', err);
-      setError(err.message || 'Login failed. Please check your credentials.');
+      setError((err as Error).message || 'Login failed. Please check your credentials.');
     } finally {
       setLoading(false);
     }
@@ -92,7 +92,7 @@ export default function LoginForm() {
             type='email'
             placeholder='Email'
             value={email}
-            onChange={e => setEmail(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
             required
             disabled={loading}
             style={styles.input}
@@ -104,7 +104,7 @@ export default function LoginForm() {
               type={showPassword ? 'text' : 'password'}
               placeholder='Password'
               value={password}
-              onChange={e => setPassword(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
               required
               disabled={loading}
               style={styles.input}
