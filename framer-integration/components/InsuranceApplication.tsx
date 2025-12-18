@@ -108,47 +108,36 @@ export default function InsuranceApplication() {
 
     if (success) {
         return (
-            <div style={styles.container}>
-                <div style={styles.card}>
-                    <div style={styles.successIcon}>✓</div>
-                    <h2 style={styles.successTitle}>Application Submitted!</h2>
-                    <p style={styles.successText}>
-                        Your insurance application has been submitted for review.
-                        You will be notified once it's been processed.
-                    </p>
-                    <div style={styles.policyInfo}>
-                        <strong>Application ID:</strong> {policyId}
-                    </div>
-                    <div style={styles.successActions}>
-                        <a href="/dashboard" style={styles.primaryButton}>
-                            Go to Dashboard
-                        </a>
-                        <a href="/insurance/policies" style={styles.secondaryButton}>
-                            View My Policies
-                        </a>
-                    </div>
+            <div style={styles.card}>
+                <div style={styles.successIcon}>✓</div>
+                <h2 style={styles.successTitle}>Application Submitted!</h2>
+                <p style={styles.successText}>
+                    Your insurance application has been submitted for review.
+                    You will be notified once it's been processed.
+                </p>
+                <div style={styles.policyInfo}>
+                    <strong>Application ID:</strong> {policyId}
+                </div>
+                <div style={styles.successActions}>
+                    <a href="/dashboard" style={styles.primaryButton}>
+                        Go to Dashboard
+                    </a>
+                    <a href="/insurance/policies" style={styles.secondaryButton}>
+                        View My Policies
+                    </a>
                 </div>
             </div>
         )
     }
 
     return (
-        <div style={styles.container}>
-            <div style={styles.card}>
-                {/* Header */}
-                <div style={styles.header}>
-                    <h1 style={styles.title}>Education Insurance Application</h1>
-                    <p style={styles.subtitle}>
-                        Protect your education investment with comprehensive coverage
-                    </p>
+        <div style={styles.card}>
+            {/* Error Message */}
+            {error && (
+                <div style={styles.errorBox}>
+                    {error}
                 </div>
-
-                {/* Error Message */}
-                {error && (
-                    <div style={styles.errorBox}>
-                        {error}
-                    </div>
-                )}
+            )}
 
                 {/* Form */}
                 <form onSubmit={handleSubmit} style={styles.form}>
@@ -337,42 +326,18 @@ export default function InsuranceApplication() {
                         Your application will be reviewed by our underwriters within 2-3 business days.
                     </p>
                 </form>
-            </div>
         </div>
     )
 }
 
 const styles = {
-    container: {
-        width: "100%",
-        minHeight: "100vh",
-        padding: "40px 20px",
-        backgroundColor: "#0A0A0A",
-    },
     card: {
         width: "100%",
         maxWidth: "800px",
-        margin: "0 auto",
         backgroundColor: "#1A1A1A",
         borderRadius: "12px",
         padding: "40px",
         border: "1px solid #333333",
-    },
-    header: {
-        marginBottom: "32px",
-        textAlign: "center",
-    },
-    title: {
-        fontSize: "32px",
-        fontWeight: "700",
-        color: "#FFFFFF",
-        marginBottom: "12px",
-        marginTop: "0",
-    },
-    subtitle: {
-        fontSize: "16px",
-        color: "#999999",
-        marginTop: "0",
     },
     errorBox: {
         backgroundColor: "#FEE",
