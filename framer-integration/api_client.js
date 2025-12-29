@@ -14,7 +14,7 @@
 
 class MashelengAPI {
   constructor(baseURL) {
-    this.baseURL = baseURL || 'https://8dff51bd1178.ngrok-free.app/api/v1';
+    this.baseURL = baseURL || 'https://84816946c72d.ngrok-free.app/api/v1';
     this.tokenKey = 'masheleng_token';
     this.refreshTokenKey = 'masheleng_refresh_token';
   }
@@ -562,6 +562,64 @@ class MashelengAPI {
    */
   async getInsuranceStatistics() {
     return this.request('/insurance/admin/statistics');
+  }
+
+  // ======================
+  // LESSONS & CURRICULUM
+  // ======================
+
+  /**
+   * Get course curriculum (modules and lessons)
+   * @param {string} courseId
+   * @returns {Promise<Array>}
+   */
+  async getCourseCurriculum(courseId) {
+    return this.request(`/courses/${courseId}/curriculum`);
+  }
+
+  /**
+   * Get a specific lesson with content
+   * @param {string} courseId
+   * @param {string} lessonId
+   * @returns {Promise<Object>}
+   */
+  async getLesson(courseId, lessonId) {
+    return this.request(`/courses/${courseId}/lessons/${lessonId}`);
+  }
+
+  /**
+   * Update lesson progress
+   * @param {string} courseId
+   * @param {string} lessonId
+   * @param {Object} progressData - { watch_time_seconds, last_position_seconds, completion_percentage, is_completed }
+   * @returns {Promise<Object>}
+   */
+  async updateLessonProgress(courseId, lessonId, progressData) {
+    return this.request(`/courses/${courseId}/lessons/${lessonId}/progress`, {
+      method: 'POST',
+      body: JSON.stringify(progressData),
+    });
+  }
+
+  /**
+   * Mark lesson as complete
+   * @param {string} courseId
+   * @param {string} lessonId
+   * @returns {Promise<Object>}
+   */
+  async completeLesson(courseId, lessonId) {
+    return this.request(`/courses/${courseId}/lessons/${lessonId}/complete`, {
+      method: 'POST',
+    });
+  }
+
+  /**
+   * Get single course (renamed for clarity)
+   * @param {string} courseId
+   * @returns {Promise<Object>}
+   */
+  async getCourse(courseId) {
+    return this.getCourseById(courseId);
   }
 }
 
