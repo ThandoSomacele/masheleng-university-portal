@@ -18,7 +18,7 @@ import { MashelengAPI } from '../api_client';
  * />
  */
 
-const API_URL = 'https://84816946c72d.ngrok-free.app/api/v1';
+const API_URL = 'https://1bde3222dd89.ngrok-free.app/api/v1';
 
 interface PaymentFormProps {
   subscriptionId: string;
