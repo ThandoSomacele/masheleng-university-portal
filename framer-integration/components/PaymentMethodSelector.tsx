@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 
 /**
- * Payment Method Selector Component
+ * PaymentMethodSelector - Matches Masheleng Design System
+ * Based on design: Dark theme with blue accent (#0066FF)
  *
  * Allows users to select their preferred payment method
  * Supports: Card, Bank Transfer, Mobile Money, Manual
@@ -117,17 +118,18 @@ const styles: Record<string, React.CSSProperties> = {
     maxWidth: '900px',
     margin: '0 auto',
     padding: '40px 20px',
+    backgroundColor: '#1A1A1A',
   },
   title: {
     fontSize: '32px',
     fontWeight: '700',
-    color: '#1a1a1a',
+    color: '#FFFFFF',
     marginBottom: '8px',
     textAlign: 'center' as const,
   },
   subtitle: {
     fontSize: '16px',
-    color: '#666',
+    color: '#A0A0A0',
     textAlign: 'center' as const,
     marginBottom: '40px',
   },
@@ -140,24 +142,24 @@ const styles: Record<string, React.CSSProperties> = {
   methodCard: {
     position: 'relative' as const,
     padding: '30px 20px',
-    border: '2px solid #e0e0e0',
+    border: '2px solid #333333',
     borderRadius: '12px',
     cursor: 'pointer',
     textAlign: 'center' as const,
     transition: 'all 0.3s ease',
-    backgroundColor: '#fff',
+    backgroundColor: '#252525',
   },
   methodCardSelected: {
-    borderColor: '#4CAF50',
-    backgroundColor: '#f1f8f4',
-    boxShadow: '0 4px 12px rgba(76, 175, 80, 0.15)',
+    borderColor: '#0066FF',
+    backgroundColor: '#252525',
+    boxShadow: '0 4px 12px rgba(0, 102, 255, 0.3)',
   },
   popularBadge: {
     position: 'absolute' as const,
     top: '10px',
     right: '10px',
     backgroundColor: '#FF9800',
-    color: '#fff',
+    color: '#FFFFFF',
     fontSize: '11px',
     fontWeight: '600',
     padding: '4px 8px',
@@ -171,12 +173,12 @@ const styles: Record<string, React.CSSProperties> = {
   methodName: {
     fontSize: '18px',
     fontWeight: '600',
-    color: '#1a1a1a',
+    color: '#FFFFFF',
     marginBottom: '8px',
   },
   methodDescription: {
     fontSize: '14px',
-    color: '#666',
+    color: '#A0A0A0',
     marginBottom: '16px',
     minHeight: '40px',
   },
@@ -189,26 +191,27 @@ const styles: Record<string, React.CSSProperties> = {
     width: '24px',
     height: '24px',
     borderRadius: '50%',
-    border: '2px solid #ccc',
+    border: '2px solid #404040',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     transition: 'all 0.3s ease',
   },
   radioSelected: {
-    borderColor: '#4CAF50',
+    borderColor: '#0066FF',
   },
   radioInner: {
     width: '12px',
     height: '12px',
     borderRadius: '50%',
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#0066FF',
   },
   securityNote: {
     display: 'flex',
     alignItems: 'flex-start',
     gap: '12px',
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#252525',
+    border: '1px solid #333333',
     padding: '16px 20px',
     borderRadius: '8px',
     marginTop: '30px',
@@ -219,7 +222,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
   securityText: {
     fontSize: '14px',
-    color: '#666',
+    color: '#A0A0A0',
     margin: 0,
     lineHeight: '1.6',
   },

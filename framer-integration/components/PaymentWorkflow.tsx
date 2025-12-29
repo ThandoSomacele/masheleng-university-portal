@@ -237,24 +237,24 @@ export default function PaymentWorkflow({
 const styles: Record<string, React.CSSProperties> = {
   container: {
     minHeight: '100vh',
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#1A1A1A',
     paddingBottom: '60px',
   },
   header: {
-    backgroundColor: '#fff',
+    backgroundColor: '#252525',
     padding: '40px 20px',
     textAlign: 'center' as const,
-    borderBottom: '1px solid #e0e0e0',
+    borderBottom: '1px solid #333333',
   },
   headerTitle: {
     fontSize: '36px',
     fontWeight: '700',
-    color: '#1a1a1a',
+    color: '#FFFFFF',
     marginBottom: '8px',
   },
   headerSubtitle: {
     fontSize: '18px',
-    color: '#666',
+    color: '#A0A0A0',
     margin: 0,
   },
   progressContainer: {
@@ -262,8 +262,8 @@ const styles: Record<string, React.CSSProperties> = {
     justifyContent: 'center',
     alignItems: 'center',
     padding: '40px 20px',
-    backgroundColor: '#fff',
-    borderBottom: '1px solid #e0e0e0',
+    backgroundColor: '#252525',
+    borderBottom: '1px solid #333333',
   },
   progressStep: {
     display: 'flex',
@@ -274,8 +274,8 @@ const styles: Record<string, React.CSSProperties> = {
     width: '40px',
     height: '40px',
     borderRadius: '50%',
-    backgroundColor: '#e0e0e0',
-    color: '#999',
+    backgroundColor: '#404040',
+    color: '#707070',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -285,7 +285,7 @@ const styles: Record<string, React.CSSProperties> = {
     transition: 'all 0.3s ease',
   },
   progressDotActive: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#0066FF',
     color: '#fff',
   },
   checkmark: {
@@ -293,23 +293,23 @@ const styles: Record<string, React.CSSProperties> = {
   },
   progressLabel: {
     fontSize: '14px',
-    color: '#999',
+    color: '#707070',
     marginRight: '20px',
     transition: 'color 0.3s ease',
   },
   progressLabelActive: {
-    color: '#4CAF50',
+    color: '#0066FF',
     fontWeight: '600',
   },
   progressLine: {
     width: '80px',
     height: '2px',
-    backgroundColor: '#e0e0e0',
+    backgroundColor: '#404040',
     marginRight: '20px',
     transition: 'background-color 0.3s ease',
   },
   progressLineActive: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#0066FF',
   },
   content: {
     padding: '20px',
@@ -317,7 +317,7 @@ const styles: Record<string, React.CSSProperties> = {
   backButton: {
     display: 'inline-block',
     fontSize: '14px',
-    color: '#4CAF50',
+    color: '#0066FF',
     cursor: 'pointer',
     marginBottom: '20px',
     padding: '8px 0',
@@ -334,7 +334,7 @@ const styles: Record<string, React.CSSProperties> = {
     padding: '14px 32px',
     fontSize: '16px',
     fontWeight: '600',
-    color: '#666',
+    color: '#A0A0A0',
     backgroundColor: 'transparent',
     border: '2px solid #666',
     borderRadius: '8px',
@@ -346,7 +346,7 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: '16px',
     fontWeight: '600',
     color: '#fff',
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#0066FF',
     border: 'none',
     borderRadius: '8px',
     cursor: 'pointer',

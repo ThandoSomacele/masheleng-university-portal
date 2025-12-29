@@ -228,13 +228,13 @@ const styles: Record<string, React.CSSProperties> = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#1A1A1A',
     padding: '20px',
   },
   card: {
     maxWidth: '600px',
     width: '100%',
-    backgroundColor: '#fff',
+    backgroundColor: '#252525',
     borderRadius: '16px',
     padding: '48px 32px',
     boxShadow: '0 4px 24px rgba(0, 0, 0, 0.08)',
@@ -256,12 +256,12 @@ const styles: Record<string, React.CSSProperties> = {
   },
   subtitle: {
     fontSize: '16px',
-    color: '#666',
+    color: '#A0A0A0',
     marginBottom: '32px',
     lineHeight: '1.6',
   },
   detailsCard: {
-    backgroundColor: '#f9f9f9',
+    backgroundColor: '#2A2A2A',
     borderRadius: '12px',
     padding: '24px',
     marginBottom: '24px',
@@ -270,10 +270,10 @@ const styles: Record<string, React.CSSProperties> = {
   detailsTitle: {
     fontSize: '18px',
     fontWeight: '600',
-    color: '#1a1a1a',
+    color: '#FFFFFF',
     marginBottom: '16px',
     paddingBottom: '12px',
-    borderBottom: '2px solid #e0e0e0',
+    borderBottom: '2px solid #333333',
   },
   detailRow: {
     display: 'flex',
@@ -282,11 +282,11 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: '15px',
   },
   detailLabel: {
-    color: '#666',
+    color: '#A0A0A0',
     fontWeight: '500',
   },
   detailValue: {
-    color: '#1a1a1a',
+    color: '#FFFFFF',
     fontWeight: '600',
   },
   detailValueError: {
@@ -294,7 +294,7 @@ const styles: Record<string, React.CSSProperties> = {
     fontWeight: '600',
   },
   suggestionsBox: {
-    backgroundColor: '#fff3e0',
+    backgroundColor: '#E65100',
     border: '1px solid #FF9800',
     borderRadius: '8px',
     padding: '20px',
@@ -349,7 +349,7 @@ const styles: Record<string, React.CSSProperties> = {
     padding: '16px 32px',
     fontSize: '16px',
     fontWeight: '600',
-    color: '#666',
+    color: '#A0A0A0',
     backgroundColor: 'transparent',
     border: '2px solid #666',
     borderRadius: '8px',
@@ -358,11 +358,11 @@ const styles: Record<string, React.CSSProperties> = {
   },
   helpSection: {
     paddingTop: '20px',
-    borderTop: '1px solid #e0e0e0',
+    borderTop: '1px solid #333333',
   },
   helpText: {
     fontSize: '14px',
-    color: '#666',
+    color: '#A0A0A0',
     margin: 0,
     lineHeight: '1.6',
   },

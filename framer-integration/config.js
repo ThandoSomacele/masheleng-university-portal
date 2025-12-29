@@ -12,7 +12,7 @@
 // ==================================================================
 // DEVELOPMENT: Update this with your ngrok URL when it changes
 // ==================================================================
-const DEV_API_URL = 'https://84816946c72d.ngrok-free.app/api/v1';
+const DEV_API_URL = 'https://1bde3222dd89.ngrok-free.app/api/v1';
 
 // ==================================================================
 // PRODUCTION: This will be your actual backend URL when deployed

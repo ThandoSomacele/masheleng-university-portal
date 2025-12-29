@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { MashelengAPI } from '../api_client';
+import { API_URL } from '../config.js';
 
 /**
- * Payment Form Component
+ * PaymentForm - Matches Masheleng Design System
+ * Based on design: Dark theme with blue accent (#0066FF)
  *
  * Handles payment submission for subscriptions
  * Supports different payment methods with appropriate form fields
@@ -17,8 +19,6 @@ import { MashelengAPI } from '../api_client';
  *   onError={(error) => console.log(error)}
  * />
  */
-
-const API_URL = 'https://1bde3222dd89.ngrok-free.app/api/v1';
 
 interface PaymentFormProps {
   subscriptionId: string;
@@ -328,9 +328,11 @@ const styles: Record<string, React.CSSProperties> = {
     maxWidth: '600px',
     margin: '0 auto',
     padding: '20px',
+    backgroundColor: '#1A1A1A',
   },
   paymentSummary: {
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#252525',
+    border: '1px solid #333333',
     padding: '20px',
     borderRadius: '8px',
     marginBottom: '30px',
@@ -339,14 +341,14 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: '18px',
     fontWeight: '600',
     marginBottom: '16px',
-    color: '#1a1a1a',
+    color: '#FFFFFF',
   },
   summaryRow: {
     display: 'flex',
     justifyContent: 'space-between',
     marginBottom: '8px',
     fontSize: '16px',
-    color: '#333',
+    color: '#FFFFFF',
   },
   formGroup: {
     marginBottom: '20px',
@@ -360,21 +362,23 @@ const styles: Record<string, React.CSSProperties> = {
     display: 'block',
     fontSize: '14px',
     fontWeight: '600',
-    color: '#333',
+    color: '#FFFFFF',
     marginBottom: '8px',
   },
   input: {
     width: '100%',
     padding: '12px 16px',
     fontSize: '16px',
-    border: '2px solid #e0e0e0',
+    backgroundColor: '#2A2A2A',
+    color: '#FFFFFF',
+    border: '2px solid #404040',
     borderRadius: '8px',
     outline: 'none',
     transition: 'border-color 0.3s ease',
     boxSizing: 'border-box' as const,
   },
   infoBox: {
-    backgroundColor: '#e3f2fd',
+    backgroundColor: '#0D47A1',
     border: '1px solid #2196F3',
     borderRadius: '8px',
     padding: '16px',
@@ -383,7 +387,7 @@ const styles: Record<string, React.CSSProperties> = {
   infoText: {
     fontSize: '14px',
     lineHeight: '1.6',
-    color: '#1565C0',
+    color: '#FFFFFF',
     margin: 0,
   },
   submitButton: {
@@ -391,21 +395,23 @@ const styles: Record<string, React.CSSProperties> = {
     padding: '16px',
     fontSize: '18px',
     fontWeight: '600',
-    color: '#fff',
-    backgroundColor: '#4CAF50',
+    color: '#FFFFFF',
+    backgroundColor: '#0066FF',
     border: 'none',
     borderRadius: '8px',
     cursor: 'pointer',
     transition: 'background-color 0.3s ease',
     marginTop: '20px',
+    boxShadow: '0 4px 12px rgba(0, 102, 255, 0.3)',
   },
   submitButtonDisabled: {
-    backgroundColor: '#ccc',
+    backgroundColor: '#505050',
     cursor: 'not-allowed',
+    opacity: 0.5,
   },
   disclaimer: {
     fontSize: '12px',
-    color: '#666',
+    color: '#A0A0A0',
     textAlign: 'center' as const,
     marginTop: '16px',
     lineHeight: '1.5',
