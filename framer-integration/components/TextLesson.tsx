@@ -1,16 +1,18 @@
 import React from 'react';
 
 interface TextLessonProps {
-  content: string;
+  content?: string;
 }
 
-export default function TextLesson({ content }: TextLessonProps) {
+export default function TextLesson({
+  content = '# Preview Content\n\nThis is a preview of a text lesson. In production, this will display the actual lesson content with proper formatting.\n\n## Features\n\n- Supports headings\n- Supports paragraphs\n- Supports lists\n\nReplace this with real content by passing the `content` prop.'
+}: TextLessonProps) {
   // Simple text rendering - in the future, you can add markdown support
   // For now, we'll respect line breaks and basic formatting
 
   const formatContent = (text: string) => {
     // Split by double newlines for paragraphs
-    const paragraphs = text.split('\n\n');
+    const paragraphs = (text || '').split('\n\n');
 
     return paragraphs.map((paragraph, index) => {
       // Check if it's a heading (starts with #)

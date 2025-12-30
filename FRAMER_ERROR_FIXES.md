@@ -172,6 +172,33 @@ onMethodSelect = () => {}
 
 ---
 
+### 6. TextLesson.tsx ✅
+
+**Error:** `Cannot read properties of undefined (reading 'split')`
+
+**Fixes Applied:**
+```typescript
+// Before
+interface TextLessonProps {
+  content: string;  // Required
+}
+
+// After
+interface TextLessonProps {
+  content?: string;  // Optional
+}
+
+// Default value with sample content
+content = '# Preview Content\n\nThis is a preview...'
+
+// Safe access in formatContent
+const paragraphs = (text || '').split('\n\n');
+```
+
+**Impact:** Component renders preview content in Framer without errors.
+
+---
+
 ## 📋 Update Checklist for Framer
 
 When updating components in Framer, follow these steps:
