@@ -17,7 +17,7 @@ import React from 'react';
  */
 
 interface PaymentFailedProps {
-  errorMessage: string;
+  errorMessage?: string;
   paymentId?: string;
   amount?: number;
   currency?: string;
@@ -28,7 +28,7 @@ interface PaymentFailedProps {
 }
 
 export default function PaymentFailed({
-  errorMessage,
+  errorMessage = 'Payment processing failed',
   paymentId,
   amount,
   currency,
@@ -38,7 +38,7 @@ export default function PaymentFailed({
   onChangePlan,
 }: PaymentFailedProps) {
   const getErrorSuggestion = (error: string) => {
-    const lowerError = error.toLowerCase();
+    const lowerError = error?.toLowerCase() || '';
 
     if (lowerError.includes('insufficient') || lowerError.includes('balance')) {
       return {

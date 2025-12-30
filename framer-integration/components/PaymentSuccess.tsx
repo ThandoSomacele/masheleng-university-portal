@@ -17,10 +17,10 @@ import React from 'react';
  */
 
 interface PaymentSuccessProps {
-  paymentId: string;
-  amount: number;
-  currency: string;
-  paymentMethod: string;
+  paymentId?: string;
+  amount?: number;
+  currency?: string;
+  paymentMethod?: string;
   transactionReference?: string;
   paidAt?: string;
   onContinue?: () => void;
@@ -28,10 +28,10 @@ interface PaymentSuccessProps {
 }
 
 export default function PaymentSuccess({
-  paymentId,
-  amount,
-  currency,
-  paymentMethod,
+  paymentId = 'preview-payment-id',
+  amount = 150,
+  currency = 'BWP',
+  paymentMethod = 'card',
   transactionReference,
   paidAt,
   onContinue,

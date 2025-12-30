@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { MashelengAPI } from '../api_client';
-import { API_URL } from '../config.js';
+import { MashelengAPI } from './ap_client';
+import { API_URL } from './config.js';
 
 /**
  * PaymentForm - Matches Masheleng Design System
@@ -21,19 +21,19 @@ import { API_URL } from '../config.js';
  */
 
 interface PaymentFormProps {
-  subscriptionId: string;
-  amount: number;
-  currency: string;
-  paymentMethod: string;
+  subscriptionId?: string;
+  amount?: number;
+  currency?: string;
+  paymentMethod?: string;
   onSuccess?: (payment: any) => void;
   onError?: (error: string) => void;
 }
 
 export default function PaymentForm({
-  subscriptionId,
-  amount,
-  currency,
-  paymentMethod,
+  subscriptionId = 'preview-subscription-id',
+  amount = 150,
+  currency = 'BWP',
+  paymentMethod = 'card',
   onSuccess,
   onError,
 }: PaymentFormProps) {
@@ -125,13 +125,11 @@ export default function PaymentForm({
       <div style={styles.formGroup}>
         <label style={styles.label}>Card Number</label>
         <input
-          type="text"
+          type='text'
           style={styles.input}
-          placeholder="1234 5678 9012 3456"
+          placeholder='1234 5678 9012 3456'
           value={formData.cardNumber}
-          onChange={(e) =>
-            handleInputChange('cardNumber', formatCardNumber(e.target.value))
-          }
+          onChange={e => handleInputChange('cardNumber', formatCardNumber(e.target.value))}
           maxLength={19}
           required
         />
@@ -140,13 +138,11 @@ export default function PaymentForm({
       <div style={styles.formGroup}>
         <label style={styles.label}>Cardholder Name</label>
         <input
-          type="text"
+          type='text'
           style={styles.input}
-          placeholder="JOHN DOE"
+          placeholder='JOHN DOE'
           value={formData.cardName}
-          onChange={(e) =>
-            handleInputChange('cardName', e.target.value.toUpperCase())
-          }
+          onChange={e => handleInputChange('cardName', e.target.value.toUpperCase())}
           required
         />
       </div>
@@ -155,13 +151,11 @@ export default function PaymentForm({
         <div style={styles.formGroup}>
           <label style={styles.label}>Expiry Date</label>
           <input
-            type="text"
+            type='text'
             style={styles.input}
-            placeholder="MM/YY"
+            placeholder='MM/YY'
             value={formData.expiryDate}
-            onChange={(e) =>
-              handleInputChange('expiryDate', formatExpiryDate(e.target.value))
-            }
+            onChange={e => handleInputChange('expiryDate', formatExpiryDate(e.target.value))}
             maxLength={5}
             required
           />
@@ -170,11 +164,11 @@ export default function PaymentForm({
         <div style={styles.formGroup}>
           <label style={styles.label}>CVV</label>
           <input
-            type="text"
+            type='text'
             style={styles.input}
-            placeholder="123"
+            placeholder='123'
             value={formData.cvv}
-            onChange={(e) => handleInputChange('cvv', e.target.value)}
+            onChange={e => handleInputChange('cvv', e.target.value)}
             maxLength={4}
             required
           />
@@ -188,11 +182,11 @@ export default function PaymentForm({
       <div style={styles.formGroup}>
         <label style={styles.label}>Bank Name</label>
         <input
-          type="text"
+          type='text'
           style={styles.input}
-          placeholder="First National Bank"
+          placeholder='First National Bank'
           value={formData.bankName}
-          onChange={(e) => handleInputChange('bankName', e.target.value)}
+          onChange={e => handleInputChange('bankName', e.target.value)}
           required
         />
       </div>
@@ -200,20 +194,23 @@ export default function PaymentForm({
       <div style={styles.formGroup}>
         <label style={styles.label}>Account Number</label>
         <input
-          type="text"
+          type='text'
           style={styles.input}
-          placeholder="1234567890"
+          placeholder='1234567890'
           value={formData.accountNumber}
-          onChange={(e) => handleInputChange('accountNumber', e.target.value)}
+          onChange={e => handleInputChange('accountNumber', e.target.value)}
           required
         />
       </div>
 
       <div style={styles.infoBox}>
         <p style={styles.infoText}>
-          <strong>Bank Transfer Instructions:</strong><br />
-          1. Transfer {currency} {amount.toFixed(2)} to our account<br />
-          2. Use your subscription ID as reference: {subscriptionId.slice(0, 8)}<br />
+          <strong>Bank Transfer Instructions:</strong>
+          <br />
+          1. Transfer {currency} {amount.toFixed(2)} to our account
+          <br />
+          2. Use your subscription ID as reference: {subscriptionId.slice(0, 8)}
+          <br />
           3. Payment will be verified within 24 hours
         </p>
       </div>
@@ -227,33 +224,35 @@ export default function PaymentForm({
         <select
           style={styles.input}
           value={formData.mobileProvider}
-          onChange={(e) => handleInputChange('mobileProvider', e.target.value)}
-          required
-        >
-          <option value="">Select Provider</option>
-          <option value="Orange Money">Orange Money</option>
-          <option value="MTN Mobile Money">MTN Mobile Money</option>
-          <option value="Mascom MyZaka">Mascom MyZaka</option>
+          onChange={e => handleInputChange('mobileProvider', e.target.value)}
+          required>
+          <option value=''>Select Provider</option>
+          <option value='Orange Money'>Orange Money</option>
+          <option value='MTN Mobile Money'>MTN Mobile Money</option>
+          <option value='Mascom MyZaka'>Mascom MyZaka</option>
         </select>
       </div>
 
       <div style={styles.formGroup}>
         <label style={styles.label}>Mobile Number</label>
         <input
-          type="tel"
+          type='tel'
           style={styles.input}
-          placeholder="+267 7X XXX XXX"
+          placeholder='+267 7X XXX XXX'
           value={formData.mobileNumber}
-          onChange={(e) => handleInputChange('mobileNumber', e.target.value)}
+          onChange={e => handleInputChange('mobileNumber', e.target.value)}
           required
         />
       </div>
 
       <div style={styles.infoBox}>
         <p style={styles.infoText}>
-          <strong>Mobile Money Instructions:</strong><br />
-          1. You will receive a payment prompt on your phone<br />
-          2. Enter your PIN to authorize the payment<br />
+          <strong>Mobile Money Instructions:</strong>
+          <br />
+          1. You will receive a payment prompt on your phone
+          <br />
+          2. Enter your PIN to authorize the payment
+          <br />
           3. You will receive a confirmation SMS
         </p>
       </div>
@@ -264,8 +263,10 @@ export default function PaymentForm({
     <>
       <div style={styles.infoBox}>
         <p style={styles.infoText}>
-          <strong>Manual Payment Instructions:</strong><br />
-          Visit any of our campus offices to make your payment in person. Please bring a copy of this payment reference: {subscriptionId.slice(0, 8)}
+          <strong>Manual Payment Instructions:</strong>
+          <br />
+          Visit any of our campus offices to make your payment in person. Please bring a copy of this payment reference:{' '}
+          {subscriptionId.slice(0, 8)}
         </p>
       </div>
 
@@ -273,9 +274,9 @@ export default function PaymentForm({
         <label style={styles.label}>Additional Notes (Optional)</label>
         <textarea
           style={{ ...styles.input, minHeight: '100px', resize: 'vertical' as const }}
-          placeholder="Any additional information..."
+          placeholder='Any additional information...'
           value={formData.notes}
-          onChange={(e) => handleInputChange('notes', e.target.value)}
+          onChange={e => handleInputChange('notes', e.target.value)}
         />
       </div>
     </>
@@ -293,9 +294,7 @@ export default function PaymentForm({
         </div>
         <div style={styles.summaryRow}>
           <span>Method:</span>
-          <strong style={{ textTransform: 'capitalize' }}>
-            {paymentMethod.replace('_', ' ')}
-          </strong>
+          <strong style={{ textTransform: 'capitalize' }}>{paymentMethod.replace('_', ' ')}</strong>
         </div>
       </div>
 
@@ -305,19 +304,17 @@ export default function PaymentForm({
       {paymentMethod === 'manual' && renderManualForm()}
 
       <button
-        type="submit"
+        type='submit'
         disabled={loading}
         style={{
           ...styles.submitButton,
           ...(loading ? styles.submitButtonDisabled : {}),
-        }}
-      >
+        }}>
         {loading ? 'Processing...' : `Pay ${currency} ${amount.toFixed(2)}`}
       </button>
 
       <p style={styles.disclaimer}>
-        By completing this payment, you agree to our terms and conditions.
-        Your payment will be processed securely.
+        By completing this payment, you agree to our terms and conditions. Your payment will be processed securely.
       </p>
     </form>
   );

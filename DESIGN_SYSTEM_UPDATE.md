@@ -1,4 +1,5 @@
 # Design System Update Summary
+
 ## Payment Components Aligned with Masheleng Brand
 
 **Date:** December 29, 2025
@@ -13,6 +14,7 @@
 **File:** `framer-integration/DESIGN_SYSTEM.md`
 
 Comprehensive style guide including:
+
 - Color palette (dark theme with #0066FF blue)
 - Typography system
 - Component patterns
@@ -24,19 +26,21 @@ Comprehensive style guide including:
 ### 2. Updated All Payment Components
 
 #### Before (Light Theme):
+
 ```typescript
-backgroundColor: '#fff'       // White
-color: '#1a1a1a'             // Dark text
-border: '#e0e0e0'            // Light gray borders
-button: '#4CAF50'            // Green buttons
+backgroundColor: '#fff'; // White
+color: '#1a1a1a'; // Dark text
+border: '#e0e0e0'; // Light gray borders
+button: '#4CAF50'; // Green buttons
 ```
 
 #### After (Dark Theme - Masheleng Brand):
+
 ```typescript
-backgroundColor: '#1A1A1A'   // Dark background
-color: '#FFFFFF'             // White text
-border: '#333333'            // Dark borders
-button: '#0066FF'            // Blue buttons (brand color)
+backgroundColor: '#1A1A1A'; // Dark background
+color: '#FFFFFF'; // White text
+border: '#333333'; // Dark borders
+button: '#0066FF'; // Blue buttons (brand color)
 ```
 
 ---
@@ -44,7 +48,9 @@ button: '#0066FF'            // Blue buttons (brand color)
 ## 🎨 Design Changes Per Component
 
 ### PaymentMethodSelector.tsx
+
 **Changes:**
+
 - ✅ Dark background (#1A1A1A)
 - ✅ Dark cards (#252525) with subtle borders (#333333)
 - ✅ Blue selection state (#0066FF) with glow
@@ -57,8 +63,10 @@ button: '#0066FF'            // Blue buttons (brand color)
 
 ---
 
-### PaymentForm.tsx  
+### PaymentForm.tsx
+
 **Changes:**
+
 - ✅ Import `API_URL` from `config.js` (removed hardcoded URL)
 - ✅ Dark form background (#1A1A1A)
 - ✅ Dark input fields (#2A2A2A) with dark borders (#404040)
@@ -72,7 +80,9 @@ button: '#0066FF'            // Blue buttons (brand color)
 ---
 
 ### PaymentSuccess.tsx
+
 **Changes:**
+
 - ✅ Dark container background (#1A1A1A)
 - ✅ Dark card (#252525)
 - ✅ White headings and text
@@ -86,7 +96,9 @@ button: '#0066FF'            // Blue buttons (brand color)
 ---
 
 ### PaymentFailed.tsx
+
 **Changes:**
+
 - ✅ Dark background (#1A1A1A)
 - ✅ Red error icon and title (#F44336) - kept for semantic meaning
 - ✅ Orange warning boxes (#E65100)
@@ -100,7 +112,9 @@ button: '#0066FF'            // Blue buttons (brand color)
 ---
 
 ### PaymentWorkflow.tsx
+
 **Changes:**
+
 - ✅ Dark background throughout
 - ✅ Blue progress dots (#0066FF)
 - ✅ Dark navigation elements
@@ -115,12 +129,13 @@ button: '#0066FF'            // Blue buttons (brand color)
 ## 🔧 Technical Improvements
 
 ### 1. Centralized Configuration
+
 ```typescript
 // Before (in PaymentForm.tsx)
 const API_URL = 'https://1bde3222dd89.ngrok-free.app/api/v1';
 
 // After
-import { API_URL } from '../config.js';
+import { API_URL } from './config.js';
 ```
 
 **Benefit:** Single source of truth for API URL
@@ -128,7 +143,9 @@ import { API_URL } from '../config.js';
 ---
 
 ### 2. Design System Headers
+
 All components now include:
+
 ```typescript
 /**
  * ComponentName - Matches Masheleng Design System
@@ -140,6 +157,7 @@ All components now include:
 ---
 
 ### 3. Updated config.js
+
 - Updated with current ngrok URL: `https://1bde3222dd89.ngrok-free.app`
 
 ---
@@ -147,6 +165,7 @@ All components now include:
 ## 🎯 Brand Consistency
 
 ### Core Colors Applied:
+
 - **Background:** #1A1A1A (dark)
 - **Cards:** #252525 (slightly lighter dark)
 - **Primary Action:** #0066FF (Masheleng blue)
@@ -155,6 +174,7 @@ All components now include:
 - **Borders:** #333333 (subtle dark)
 
 ### Matches Design Screenshots:
+
 ✅ Login page (dark theme, blue button)
 ✅ Pricing page (dark cards, blue CTAs)
 ✅ Homepage (dark background, white text)
@@ -164,15 +184,15 @@ All components now include:
 
 ## 📊 Before vs After Comparison
 
-| Element | Before | After |
-|---------|--------|-------|
-| Background | #f5f5f5 (light gray) | #1A1A1A (dark) |
-| Cards | #fff (white) | #252525 (dark) |
-| Primary Button | #4CAF50 (green) | #0066FF (blue) |
-| Text | #1a1a1a (dark) | #FFFFFF (white) |
-| Secondary Text | #666 (gray) | #A0A0A0 (light gray) |
-| Borders | #e0e0e0 (light) | #333333 (dark) |
-| Input Fields | #fff (white) | #2A2A2A (dark) |
+| Element        | Before               | After                |
+| -------------- | -------------------- | -------------------- |
+| Background     | #f5f5f5 (light gray) | #1A1A1A (dark)       |
+| Cards          | #fff (white)         | #252525 (dark)       |
+| Primary Button | #4CAF50 (green)      | #0066FF (blue)       |
+| Text           | #1a1a1a (dark)       | #FFFFFF (white)      |
+| Secondary Text | #666 (gray)          | #A0A0A0 (light gray) |
+| Borders        | #e0e0e0 (light)      | #333333 (dark)       |
+| Input Fields   | #fff (white)         | #2A2A2A (dark)       |
 
 ---
 
@@ -189,6 +209,7 @@ All components now include:
 ## 🚀 Ready for Production
 
 All payment components now:
+
 - ✅ Follow Masheleng design system
 - ✅ Use centralized API configuration
 - ✅ Have consistent dark theme

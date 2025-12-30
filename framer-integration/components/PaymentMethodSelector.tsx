@@ -15,12 +15,12 @@ import React, { useState } from 'react';
  */
 
 interface PaymentMethodSelectorProps {
-  onMethodSelect: (method: string) => void;
+  onMethodSelect?: (method: string) => void;
   selectedMethod?: string;
 }
 
 export default function PaymentMethodSelector({
-  onMethodSelect,
+  onMethodSelect = () => {},
   selectedMethod = 'card',
 }: PaymentMethodSelectorProps) {
   const [selected, setSelected] = useState(selectedMethod);

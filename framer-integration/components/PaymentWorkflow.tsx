@@ -21,9 +21,9 @@ import PaymentFailed from './PaymentFailed';
  */
 
 interface PaymentWorkflowProps {
-  subscriptionId: string;
-  amount: number;
-  currency: string;
+  subscriptionId?: string;
+  amount?: number;
+  currency?: string;
   tierName?: string;
   onComplete?: () => void;
   onCancel?: () => void;
@@ -32,10 +32,10 @@ interface PaymentWorkflowProps {
 type PaymentStep = 'method' | 'form' | 'success' | 'failed';
 
 export default function PaymentWorkflow({
-  subscriptionId,
-  amount,
-  currency,
-  tierName,
+  subscriptionId = 'preview-subscription-id',
+  amount = 150,
+  currency = 'BWP',
+  tierName = 'Entry Tier',
   onComplete,
   onCancel,
 }: PaymentWorkflowProps) {

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { MashelengAPI } from '../api_client.js';
-import { API_URL } from '../config.js';
+import { MashelengAPI } from './ap_client.js';
+import { API_URL } from './config.js';
 
 /**
  * RegisterForm - Matches Masheleng Design System
