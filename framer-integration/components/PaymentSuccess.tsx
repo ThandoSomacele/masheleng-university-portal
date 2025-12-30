@@ -241,7 +241,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
   noticeText: {
     fontSize: '14px',
-    color: '#2E7D32',
+    color: '##ffffff',
     margin: 0,
     lineHeight: '1.6',
     textAlign: 'left' as const,
