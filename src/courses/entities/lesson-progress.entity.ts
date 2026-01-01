@@ -11,7 +11,7 @@ import {
 import { User } from '../../users/entities/user.entity';
 import { CourseLesson } from './course-lesson.entity';
 
-@Entity('lesson_progress')
+@Entity('user_lesson_progress')
 @Index(['user_id', 'lesson_id'], { unique: true })
 export class LessonProgress {
   @PrimaryGeneratedColumn('uuid')

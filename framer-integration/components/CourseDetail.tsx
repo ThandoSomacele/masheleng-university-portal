@@ -2,7 +2,26 @@ import React, { useState, useEffect } from 'react';
 import { MashelengAPI } from './api_client.js';
 import { API_URL } from './config.js';
 
-export default function CourseDetail({ courseId }: { courseId: string }) {
+/**
+ * CourseDetail Component
+ *
+ * Displays detailed course information including curriculum, enrollment status, and progress.
+ *
+ * FRAMER SETUP:
+ * 1. Add this as a Code Component in Framer
+ * 2. Create a dynamic route: /courses/:courseId
+ * 3. Pass the courseId prop from the route parameter
+ *
+ * Example usage in Framer:
+ * <CourseDetail courseId={router.params.courseId} />
+ */
+
+interface CourseDetailProps {
+  courseId?: string;
+  style?: React.CSSProperties;
+}
+
+export default function CourseDetail({ courseId: courseIdProp, style }: CourseDetailProps) {
   const [loading, setLoading] = useState(true);
   const [course, setCourse] = useState<any>(null);
   const [curriculum, setCurriculum] = useState<any[]>([]);
@@ -10,38 +29,85 @@ export default function CourseDetail({ courseId }: { courseId: string }) {
   const [error, setError] = useState('');
   const [enrolling, setEnrolling] = useState(false);
   const [expandedModules, setExpandedModules] = useState<Set<string>>(new Set());
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [courseId, setCourseId] = useState<string | null>(null);
 
   useEffect(() => {
-    loadCourseData();
+    // Extract courseId from prop or URL
+    let extractedCourseId = courseIdProp;
+
+    if (!extractedCourseId && typeof window !== 'undefined') {
+      // Try to extract from URL path
+      const pathSegments = window.location.pathname.split('/');
+      const coursesIndex = pathSegments.indexOf('courses');
+
+      if (coursesIndex !== -1 && pathSegments[coursesIndex + 1]) {
+        extractedCourseId = pathSegments[coursesIndex + 1];
+        console.log('📍 Extracted courseId from URL:', extractedCourseId);
+      }
+
+      // Validate UUID format
+      const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+      if (extractedCourseId && !uuidRegex.test(extractedCourseId)) {
+        console.warn('⚠️ Invalid UUID format:', extractedCourseId);
+        extractedCourseId = undefined;
+      }
+    }
+
+    setCourseId(extractedCourseId || null);
+  }, [courseIdProp]);
+
+  useEffect(() => {
+    // Check authentication status
+    const token = typeof window !== 'undefined' ? localStorage.getItem('masheleng_token') : null;
+    setIsAuthenticated(!!token);
+
+    if (courseId) {
+      console.log('✅ Loading course data for ID:', courseId);
+      loadCourseData();
+    } else {
+      setError('No course ID provided. Please ensure this component is used on a course detail page with a valid course ID in the URL (e.g., /courses/11111111-1111-1111-1111-111111111111).');
+      setLoading(false);
+    }
   }, [courseId]);
 
   const loadCourseData = async () => {
     try {
       const api = new MashelengAPI(API_URL);
-      const token = localStorage.getItem('masheleng_token');
+      const token = typeof window !== 'undefined' ? localStorage.getItem('masheleng_token') : null;
 
-      // Load course details
-      const courseData = await api.getCourse(courseId);
-      setCourse(courseData);
-
-      // Load curriculum if user is authenticated
       if (token) {
+        // Authenticated user - load full course details
         try {
-          const curriculumData = await api.getCourseCurriculum(courseId);
-          setCurriculum(curriculumData);
+          const courseData = await api.getCourse(courseId!);
+          setCourse(courseData);
 
-          // Check if user is enrolled
+          // Check enrollment status
           const enrollments = await api.getMyEnrollments();
           const userEnrollment = enrollments.find((e: any) => e.course_id === courseId);
           setEnrollment(userEnrollment);
 
-          // Expand first module by default
-          if (curriculumData.length > 0) {
-            setExpandedModules(new Set([curriculumData[0].id]));
+          // Load curriculum (may fail if server error, but course details still work)
+          try {
+            const curriculumData = await api.getCourseCurriculum(courseId!);
+            setCurriculum(curriculumData);
+
+            // Expand first module by default
+            if (curriculumData.length > 0) {
+              setExpandedModules(new Set([curriculumData[0].id]));
+            }
+          } catch (currErr: any) {
+            console.warn('⚠️ Failed to load curriculum:', currErr.message);
+            // Continue anyway - user can still see course details and enroll
           }
-        } catch (err) {
-          console.log('User not logged in or enrollment error:', err);
+        } catch (err: any) {
+          // If auth fails, fall back to public course list
+          console.log('Auth failed, loading public course data:', err);
+          await loadPublicCourseData();
         }
+      } else {
+        // Not authenticated - load from public course list
+        await loadPublicCourseData();
       }
 
       setLoading(false);
@@ -52,18 +118,44 @@ export default function CourseDetail({ courseId }: { courseId: string }) {
     }
   };
 
+  const loadPublicCourseData = async () => {
+    try {
+      const api = new MashelengAPI(API_URL);
+      // Fetch from public courses endpoint
+      const courses = await fetch(`${API_URL}/courses`).then(res => res.json());
+      const courseData = courses.find((c: any) => c.id === courseId);
+
+      if (courseData) {
+        setCourse(courseData);
+      } else {
+        setError('Course not found');
+      }
+    } catch (err) {
+      console.error('Public course load error:', err);
+      setError('Unable to load course details');
+    }
+  };
+
   const handleEnroll = async () => {
+    if (!isAuthenticated) {
+      // Redirect to login
+      if (typeof window !== 'undefined') {
+        window.location.href = `/login?redirect=/courses/${courseId}`;
+      }
+      return;
+    }
+
     try {
       setEnrolling(true);
       const api = new MashelengAPI(API_URL);
-      await api.enrollInCourse(courseId);
+      await api.enrollInCourse(courseId!);
 
       // Reload data to show enrolled state
       await loadCourseData();
       setEnrolling(false);
-    } catch (err) {
+    } catch (err: any) {
       console.error('Enrollment error:', err);
-      setError((err as Error).message);
+      setError(err.message || 'Enrollment failed. Please try again.');
       setEnrolling(false);
     }
   };
@@ -81,7 +173,9 @@ export default function CourseDetail({ courseId }: { courseId: string }) {
   const startLearning = () => {
     if (curriculum.length > 0 && curriculum[0].lessons?.length > 0) {
       const firstLesson = curriculum[0].lessons[0];
-      window.location.href = `/courses/${courseId}/learn?lesson=${firstLesson.id}`;
+      if (typeof window !== 'undefined') {
+        window.location.href = `/courses/${courseId}/learn?lesson=${firstLesson.id}`;
+      }
     }
   };
 
@@ -90,7 +184,9 @@ export default function CourseDetail({ courseId }: { courseId: string }) {
     for (const module of curriculum) {
       for (const lesson of module.lessons || []) {
         if (!lesson.is_completed) {
-          window.location.href = `/courses/${courseId}/learn?lesson=${lesson.id}`;
+          if (typeof window !== 'undefined') {
+            window.location.href = `/courses/${courseId}/learn?lesson=${lesson.id}`;
+          }
           return;
         }
       }
@@ -101,7 +197,7 @@ export default function CourseDetail({ courseId }: { courseId: string }) {
 
   if (loading) {
     return (
-      <div style={styles.container}>
+      <div style={{ ...styles.container, ...style }}>
         <div style={styles.loading}>Loading course...</div>
       </div>
     );
@@ -109,15 +205,23 @@ export default function CourseDetail({ courseId }: { courseId: string }) {
 
   if (error) {
     return (
-      <div style={styles.container}>
+      <div style={{ ...styles.container, ...style }}>
         <div style={styles.error}>{error}</div>
+        {!isAuthenticated && (
+          <button
+            onClick={() => typeof window !== 'undefined' && (window.location.href = '/login')}
+            style={styles.primaryButton}
+          >
+            Login to View Full Details
+          </button>
+        )}
       </div>
     );
   }
 
   if (!course) {
     return (
-      <div style={styles.container}>
+      <div style={{ ...styles.container, ...style }}>
         <div style={styles.error}>Course not found</div>
       </div>
     );
@@ -129,32 +233,41 @@ export default function CourseDetail({ courseId }: { courseId: string }) {
     0
   );
 
+  const getTierName = (level: number) => {
+    switch (level) {
+      case 1: return 'Entry';
+      case 2: return 'Premium';
+      case 3: return 'Premium+';
+      default: return 'Entry';
+    }
+  };
+
   return (
-    <div style={styles.container}>
+    <div style={{ ...styles.container, ...style }}>
       {/* Course Header */}
       <div style={styles.header}>
         {course.thumbnail_url && (
           <div style={styles.thumbnail}>
-            <img src={course.thumbnail_url} alt={course.name} style={styles.thumbnailImage} />
+            <img src={course.thumbnail_url} alt={course.title} style={styles.thumbnailImage} />
           </div>
         )}
         <div style={styles.headerContent}>
-          <h1 style={styles.title}>{course.name}</h1>
+          <h1 style={styles.title}>{course.title}</h1>
           <p style={styles.description}>{course.description}</p>
 
           {/* Course Stats */}
           <div style={styles.stats}>
             <div style={styles.statItem}>
               <span style={styles.statIcon}>📚</span>
-              <span style={styles.statText}>{totalLessons} Lessons</span>
+              <span style={styles.statText}>{totalLessons || 'Multiple'} Lessons</span>
             </div>
             <div style={styles.statItem}>
               <span style={styles.statIcon}>⏱️</span>
-              <span style={styles.statText}>{course.duration_hours || 0}h Duration</span>
+              <span style={styles.statText}>{Math.floor((course.duration_minutes || 0) / 60)}h Duration</span>
             </div>
             <div style={styles.statItem}>
-              <span style={styles.statIcon}>📊</span>
-              <span style={styles.statText}>{course.level || 'All Levels'}</span>
+              <span style={styles.statIcon}>🎓</span>
+              <span style={styles.statText}>{course.instructor_name || 'Masheleng Academy'}</span>
             </div>
             <div style={styles.statItem}>
               <span style={styles.statIcon}>👥</span>
@@ -163,49 +276,58 @@ export default function CourseDetail({ courseId }: { courseId: string }) {
           </div>
 
           {/* Enrollment Status & Actions */}
-          {enrollment ? (
-            <div style={styles.enrolledSection}>
-              <div style={styles.progressInfo}>
-                <span style={styles.progressLabel}>Your Progress:</span>
-                <span style={styles.progressPercentage}>{enrollment.progress_percentage}%</span>
-              </div>
-              <div style={styles.progressBarContainer}>
-                <div style={{ ...styles.progressBar, width: `${enrollment.progress_percentage}%` }} />
-              </div>
-              <div style={styles.enrolledActions}>
-                <button onClick={continueFromLastLesson} style={styles.primaryButton}>
-                  {enrollment.progress_percentage > 0 ? 'Continue Learning' : 'Start Learning'}
-                </button>
-                <div style={styles.completionInfo}>
-                  {completedLessons} of {totalLessons} lessons completed
+          {isAuthenticated ? (
+            enrollment ? (
+              <div style={styles.enrolledSection}>
+                <div style={styles.progressInfo}>
+                  <span style={styles.progressLabel}>Your Progress:</span>
+                  <span style={styles.progressPercentage}>{enrollment.progress_percentage || 0}%</span>
+                </div>
+                <div style={styles.progressBarContainer}>
+                  <div style={{ ...styles.progressBar, width: `${enrollment.progress_percentage || 0}%` }} />
+                </div>
+                <div style={styles.enrolledActions}>
+                  <button onClick={continueFromLastLesson} style={styles.primaryButton}>
+                    {(enrollment.progress_percentage || 0) > 0 ? 'Continue Learning' : 'Start Learning'}
+                  </button>
+                  <div style={styles.completionInfo}>
+                    {completedLessons} of {totalLessons} lessons completed
+                  </div>
                 </div>
               </div>
-            </div>
+            ) : (
+              <div style={styles.enrollSection}>
+                <button
+                  onClick={handleEnroll}
+                  disabled={enrolling}
+                  style={{
+                    ...styles.primaryButton,
+                    ...(enrolling && styles.buttonDisabled),
+                  }}>
+                  {enrolling ? 'Enrolling...' : 'Enroll Now'}
+                </button>
+                <p style={styles.enrollNote}>
+                  Requires {getTierName(course.required_tier_level)} tier or higher
+                </p>
+              </div>
+            )
           ) : (
             <div style={styles.enrollSection}>
-              <button
-                onClick={handleEnroll}
-                disabled={enrolling}
-                style={{
-                  ...styles.primaryButton,
-                  ...(enrolling && styles.buttonDisabled),
-                }}>
-                {enrolling ? 'Enrolling...' : 'Enroll Now'}
+              <button onClick={handleEnroll} style={styles.primaryButton}>
+                Login to Enroll
               </button>
               <p style={styles.enrollNote}>
-                Requires {course.required_tier_level === 1 ? 'Entry' : course.required_tier_level === 2 ? 'Premium' : 'Premium+'} tier or higher
+                Requires {getTierName(course.required_tier_level)} tier subscription
               </p>
             </div>
           )}
         </div>
       </div>
 
-      {/* Course Curriculum */}
-      <div style={styles.section}>
-        <h2 style={styles.sectionTitle}>Course Curriculum</h2>
-        {curriculum.length === 0 ? (
-          <p style={styles.emptyText}>No lessons available yet.</p>
-        ) : (
+      {/* Course Curriculum - Only show if authenticated and have curriculum data */}
+      {isAuthenticated && curriculum.length > 0 && (
+        <div style={styles.section}>
+          <h2 style={styles.sectionTitle}>Course Curriculum</h2>
           <div style={styles.curriculum}>
             {curriculum.map((module, index) => (
               <div key={module.id} style={styles.moduleCard}>
@@ -271,29 +393,21 @@ export default function CourseDetail({ courseId }: { courseId: string }) {
               </div>
             ))}
           </div>
-        )}
-      </div>
-
-      {/* What You'll Learn */}
-      {course.what_youll_learn && (
-        <div style={styles.section}>
-          <h2 style={styles.sectionTitle}>What You'll Learn</h2>
-          <div style={styles.learningPoints}>
-            {course.what_youll_learn.split('\n').map((point: string, i: number) => (
-              <div key={i} style={styles.learningPoint}>
-                <span style={styles.checkIcon}>✓</span>
-                <span>{point}</span>
-              </div>
-            ))}
-          </div>
         </div>
       )}
 
-      {/* Requirements */}
-      {course.requirements && (
+      {!isAuthenticated && (
         <div style={styles.section}>
-          <h2 style={styles.sectionTitle}>Requirements</h2>
-          <p style={styles.requirementsText}>{course.requirements}</p>
+          <div style={styles.loginPrompt}>
+            <h3 style={styles.loginPromptTitle}>Want to see the full curriculum?</h3>
+            <p style={styles.loginPromptText}>Login to view all course modules and lessons</p>
+            <button
+              onClick={() => typeof window !== 'undefined' && (window.location.href = `/login?redirect=/courses/${courseId}`)}
+              style={styles.secondaryButton}
+            >
+              Login Now
+            </button>
+          </div>
         </div>
       )}
     </div>
@@ -317,9 +431,10 @@ const styles = {
   },
   error: {
     textAlign: 'center' as const,
-    padding: '100px 20px',
+    padding: '40px 20px',
     color: '#EF4444',
     fontSize: '18px',
+    marginBottom: '20px',
   },
   header: {
     marginBottom: '48px',
@@ -337,9 +452,7 @@ const styles = {
     height: '100%',
     objectFit: 'cover' as const,
   },
-  headerContent: {
-    // Content styles
-  },
+  headerContent: {},
   title: {
     fontSize: '36px',
     fontWeight: '700' as const,
@@ -439,6 +552,17 @@ const styles = {
     width: '100%',
     maxWidth: '300px',
   },
+  secondaryButton: {
+    backgroundColor: '#1A1A1A',
+    color: '#FFFFFF',
+    padding: '12px 24px',
+    fontSize: '14px',
+    fontWeight: '600' as const,
+    borderRadius: '8px',
+    border: '1px solid #333333',
+    cursor: 'pointer',
+    transition: 'background-color 0.2s ease',
+  },
   buttonDisabled: {
     backgroundColor: '#4D4D4D',
     cursor: 'not-allowed',
@@ -498,9 +622,7 @@ const styles = {
     fontSize: '13px',
     color: '#999999',
   },
-  lessonCount: {
-    // Style for lesson count
-  },
+  lessonCount: {},
   lessonList: {
     borderTop: '1px solid #333333',
   },
@@ -541,12 +663,8 @@ const styles = {
     fontSize: '12px',
     color: '#999999',
   },
-  lessonType: {
-    // Lesson type style
-  },
-  lessonDuration: {
-    // Duration style
-  },
+  lessonType: {},
+  lessonDuration: {},
   lessonRight: {
     display: 'flex',
     gap: '8px',
@@ -576,30 +694,23 @@ const styles = {
     fontSize: '11px',
     fontWeight: '600' as const,
   },
-  emptyText: {
+  loginPrompt: {
+    backgroundColor: '#1A1A1A',
+    padding: '40px',
+    borderRadius: '12px',
+    border: '1px solid #333333',
+    textAlign: 'center' as const,
+  },
+  loginPromptTitle: {
+    fontSize: '20px',
+    fontWeight: '600' as const,
+    color: '#FFFFFF',
+    marginBottom: '12px',
+    marginTop: '0',
+  },
+  loginPromptText: {
+    fontSize: '14px',
     color: '#999999',
-    fontSize: '14px',
-  },
-  learningPoints: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-    gap: '16px',
-  },
-  learningPoint: {
-    display: 'flex',
-    gap: '12px',
-    alignItems: 'flex-start',
-    fontSize: '14px',
-    color: '#CCCCCC',
-  },
-  checkIcon: {
-    color: '#22C55E',
-    fontSize: '16px',
-    flexShrink: 0,
-  },
-  requirementsText: {
-    fontSize: '14px',
-    color: '#CCCCCC',
-    lineHeight: '1.6',
+    marginBottom: '24px',
   },
 };
