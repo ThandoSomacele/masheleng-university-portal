@@ -12,7 +12,7 @@
 // ==================================================================
 // DEVELOPMENT: Update this with your ngrok URL when it changes
 // ==================================================================
-const DEV_API_URL = 'https://1bde3222dd89.ngrok-free.app/api/v1';
+const DEV_API_URL = 'https://736e49f25fde.ngrok-free.app/api/v1';
 
 // ==================================================================
 // PRODUCTION: This will be your actual backend URL when deployed
@@ -22,7 +22,9 @@ const PROD_API_URL = 'https://api.masheleng.com/api/v1';
 // ==================================================================
 // AUTO-DETECT ENVIRONMENT
 // ==================================================================
-const isProduction = typeof window !== 'undefined' && window.location.hostname === 'university.masheleng.com';
+// TEMPORARY: Force development mode until production API is ready
+const isProduction = false;
+// const isProduction = typeof window !== 'undefined' && window.location.hostname === 'university.masheleng.com';
 
 // Export the correct API URL based on environment
 export const API_URL = isProduction ? PROD_API_URL : DEV_API_URL;
