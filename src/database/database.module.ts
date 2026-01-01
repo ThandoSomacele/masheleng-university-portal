@@ -9,6 +9,7 @@ import { Course } from '../courses/entities/course.entity';
 import { CourseModule as CourseModuleEntity } from '../courses/entities/course-module.entity';
 import { CourseLesson } from '../courses/entities/course-lesson.entity';
 import { UserCourseEnrollment } from '../courses/entities/user-course-enrollment.entity';
+import { LessonProgress } from '../courses/entities/lesson-progress.entity';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { UserCourseEnrollment } from '../courses/entities/user-course-enrollment
             CourseModuleEntity,
             CourseLesson,
             UserCourseEnrollment,
+            LessonProgress,
           ],
           migrations: [],
           synchronize: configService.get<boolean>('DATABASE_SYNCHRONIZE', false),
