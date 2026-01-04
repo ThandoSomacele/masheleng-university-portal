@@ -16,8 +16,10 @@ import { test, expect, Page } from '@playwright/test';
 
 // Configuration
 const CONFIG = {
-  // Update these based on your setup
-  FRAMER_SITE_URL: 'https://university.masheleng.com',
+  // Framer site URL - Update this to your actual Framer site
+  FRAMER_SITE_URL: process.env.FRAMER_SITE_URL || 'https://university.masheleng.com',
+
+  // Backend API URL (auto-detected from ngrok or localhost)
   BACKEND_API_URL: 'https://566517f62a69.ngrok-free.app/api/v1',
 
   TEST_USER: {
@@ -30,6 +32,9 @@ const CONFIG = {
     webdev: '22222222-1111-1111-1111-111111111111',
     business: '33333333-1111-1111-1111-111111111111',
   },
+
+  // Test mode: 'api' (test API only) or 'full' (test Framer + API)
+  TEST_MODE: process.env.TEST_MODE || 'api',
 };
 
 test.describe('Framer CourseDetail Component E2E', () => {
