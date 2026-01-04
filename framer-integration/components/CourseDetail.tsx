@@ -36,24 +36,45 @@ export default function CourseDetail({ courseId: courseIdProp, style }: CourseDe
     // Extract courseId from prop or URL
     let extractedCourseId = courseIdProp;
 
-    if (!extractedCourseId && typeof window !== 'undefined') {
-      // Try to extract from URL path
-      const pathSegments = window.location.pathname.split('/');
-      const coursesIndex = pathSegments.indexOf('courses');
+    console.log('🔍 CourseDetail - Debugging courseId extraction:');
+    console.log('  - courseIdProp:', courseIdProp);
+    console.log('  - window.location.pathname:', typeof window !== 'undefined' ? window.location.pathname : 'N/A (SSR)');
+    console.log('  - API_URL:', API_URL);
 
+    if (!extractedCourseId && typeof window !== 'undefined') {
+      // UUID validation pattern
+      const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+      // Try to extract from URL path
+      const pathSegments = window.location.pathname.split('/').filter(s => s.length > 0);
+      console.log('  - Path segments:', pathSegments);
+
+      // Strategy 1: Look for /courses/:courseId pattern
+      const coursesIndex = pathSegments.indexOf('courses');
       if (coursesIndex !== -1 && pathSegments[coursesIndex + 1]) {
         extractedCourseId = pathSegments[coursesIndex + 1];
-        console.log('📍 Extracted courseId from URL:', extractedCourseId);
+        console.log('✅ Strategy 1: Extracted courseId from /courses/ path:', extractedCourseId);
+      }
+
+      // Strategy 2: If not found, search for any UUID-like segment in the path
+      if (!extractedCourseId) {
+        for (const segment of pathSegments) {
+          if (uuidRegex.test(segment)) {
+            extractedCourseId = segment;
+            console.log('✅ Strategy 2: Found UUID in path:', extractedCourseId);
+            break;
+          }
+        }
       }
 
       // Validate UUID format
-      const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
       if (extractedCourseId && !uuidRegex.test(extractedCourseId)) {
         console.warn('⚠️ Invalid UUID format:', extractedCourseId);
         extractedCourseId = undefined;
       }
     }
 
+    console.log('🎯 Final courseId:', extractedCourseId || 'NONE');
     setCourseId(extractedCourseId || null);
   }, [courseIdProp]);
 
@@ -76,20 +97,29 @@ export default function CourseDetail({ courseId: courseIdProp, style }: CourseDe
       const api = new MashelengAPI(API_URL);
       const token = typeof window !== 'undefined' ? localStorage.getItem('masheleng_token') : null;
 
+      console.log('🔐 Authentication status:', token ? 'Logged in' : 'Guest');
+      console.log('📡 Fetching course:', courseId);
+
       if (token) {
         // Authenticated user - load full course details
         try {
+          console.log('📥 API Call: GET /courses/' + courseId);
           const courseData = await api.getCourse(courseId!);
+          console.log('✅ Course data loaded:', courseData.title);
           setCourse(courseData);
 
           // Check enrollment status
+          console.log('📥 API Call: GET /courses/enrollments/my');
           const enrollments = await api.getMyEnrollments();
           const userEnrollment = enrollments.find((e: any) => e.course_id === courseId);
+          console.log('📝 Enrollment status:', userEnrollment ? 'Enrolled' : 'Not enrolled');
           setEnrollment(userEnrollment);
 
           // Load curriculum (may fail if server error, but course details still work)
           try {
+            console.log('📥 API Call: GET /courses/' + courseId + '/curriculum');
             const curriculumData = await api.getCourseCurriculum(courseId!);
+            console.log('✅ Curriculum loaded:', curriculumData.length, 'modules');
             setCurriculum(curriculumData);
 
             // Expand first module by default
@@ -101,18 +131,28 @@ export default function CourseDetail({ courseId: courseIdProp, style }: CourseDe
             // Continue anyway - user can still see course details and enroll
           }
         } catch (err: any) {
-          // If auth fails, fall back to public course list
-          console.log('Auth failed, loading public course data:', err);
-          await loadPublicCourseData();
+          // If auth fails or subscription required, show specific error
+          console.error('❌ Course load failed:', err.message);
+
+          if (err.message.includes('subscription')) {
+            setError('This course requires an active subscription. Please subscribe to access course details.');
+          } else if (err.message.includes('Forbidden')) {
+            setError('You do not have access to this course. Please check your subscription tier.');
+          } else {
+            // Fall back to public course list
+            console.log('Attempting to load public course data...');
+            await loadPublicCourseData();
+          }
         }
       } else {
         // Not authenticated - load from public course list
+        console.log('Guest user - loading public course data');
         await loadPublicCourseData();
       }
 
       setLoading(false);
     } catch (err) {
-      console.error('Course load error:', err);
+      console.error('💥 Unexpected error:', err);
       setError((err as Error).message);
       setLoading(false);
     }
