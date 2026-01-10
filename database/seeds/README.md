@@ -1,6 +1,55 @@
-# Sample Course Data Seeds
+# Database Seeds
 
-This directory contains sample data for testing the Masheleng University platform.
+This directory contains seed data for testing the Masheleng University platform.
+
+---
+
+## Development Subscription Scripts
+
+Use these scripts to quickly switch the demo user's subscription tier for testing upgrade flows.
+
+### Available Scripts
+
+| Script | Description | Command |
+|--------|-------------|---------|
+| `dev-subscription-none.sql` | Remove subscription (test full flow) | `psql -d masheleng_portal -f database/seeds/dev-subscription-none.sql` |
+| `dev-subscription-entry.sql` | Set to Entry tier (BWP 99/mo) | `psql -d masheleng_portal -f database/seeds/dev-subscription-entry.sql` |
+| `dev-subscription-premium.sql` | Set to Premium tier (BWP 180/mo) | `psql -d masheleng_portal -f database/seeds/dev-subscription-premium.sql` |
+| `dev-subscription-premium-plus.sql` | Set to Premium+ tier (BWP 250/mo) | `psql -d masheleng_portal -f database/seeds/dev-subscription-premium-plus.sql` |
+| `demo-user-data.sql` | Full demo setup (subscription + payment + insurance + enrollments) | `psql -d masheleng_portal -f database/seeds/demo-user-data.sql` |
+
+### Quick Commands (with auth)
+
+```bash
+# Remove subscription (test from scratch)
+PGPASSWORD=masheleng_dev_password_2024 psql -h localhost -U masheleng -d masheleng_portal -f database/seeds/dev-subscription-none.sql
+
+# Set to Entry tier
+PGPASSWORD=masheleng_dev_password_2024 psql -h localhost -U masheleng -d masheleng_portal -f database/seeds/dev-subscription-entry.sql
+
+# Set to Premium tier
+PGPASSWORD=masheleng_dev_password_2024 psql -h localhost -U masheleng -d masheleng_portal -f database/seeds/dev-subscription-premium.sql
+
+# Set to Premium+ tier (full access)
+PGPASSWORD=masheleng_dev_password_2024 psql -h localhost -U masheleng -d masheleng_portal -f database/seeds/dev-subscription-premium-plus.sql
+
+# Full reset with all demo data
+PGPASSWORD=masheleng_dev_password_2024 psql -h localhost -U masheleng -d masheleng_portal -f database/seeds/demo-user-data.sql
+```
+
+### Testing Upgrade Flow
+
+1. Start with no subscription: `dev-subscription-none.sql`
+2. User sees pricing page, selects Entry tier
+3. Switch to Entry: `dev-subscription-entry.sql`
+4. User tries to access Premium course, sees upgrade prompt
+5. Switch to Premium: `dev-subscription-premium.sql`
+6. User tries to access insurance (Premium+ only)
+7. Switch to Premium+: `dev-subscription-premium-plus.sql`
+
+---
+
+# Sample Course Data Seeds
 
 ## What's Included
 
